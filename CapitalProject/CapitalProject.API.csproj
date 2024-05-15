@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CapitalProject.Core\CapitalProject.Core.csproj" />
+    <ProjectReference Include="..\CapitalProject.Data\CapitalProject.Data.csproj" />
   </ItemGroup>
 
 </Project>

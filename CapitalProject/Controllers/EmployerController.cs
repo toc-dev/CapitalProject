@@ -1,4 +1,6 @@
-﻿using CapitalProject.Core.Utilities;
+﻿using CapitalProject.Core.Interfaces;
+using CapitalProject.Core.Utilities;
+using CapitalProject.Data.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CapitalProject.API.Controllers

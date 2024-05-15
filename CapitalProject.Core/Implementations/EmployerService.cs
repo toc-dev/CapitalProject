@@ -1,4 +1,6 @@
 ﻿using CapitalProject.Core.Interfaces;
+using CapitalProject.Data.DTOs;
+using CapitalProject.Data.Entities;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using System;

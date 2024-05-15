@@ -1,4 +1,6 @@
 ﻿using CapitalProject.Core.Interfaces;
+using CapitalProject.Data.DTOs;
+using CapitalProject.Data.Entities;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using System;
@@ -6,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CapitalProject.Data.Enums.Enumerations;
 
 namespace CapitalProject.Core.Implementations
 {
