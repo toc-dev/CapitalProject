@@ -11,23 +11,24 @@ namespace CapitalProject.Data.DTOs
     {
         public QuestionType QuestionType { get; set; }
         public string? Question { get; set; }
-        public string? ParagraphAnswer { get; set; }
-        public bool? YesNoAnswer { get; set; }
-        public string? DropDownAnswer { get; set; }
-        public string? MultipleChoiceAnswer { get; set; }
-        public DateTime? Date { get; set; }
-        public int? NumericalAnswer { get; set; }
-        public int MaxChoiceAllowed { get; set; }
+        public string? Answer { get; set; }
+        public MultipleChoiceAnswerDTO? MultipleChoiceAnswer { get; set; }
+
     }
-    public class UpdateCustomQuestionDTO
+    public class MultipleChoiceAnswerDTO
     {
-        public QuestionType QuestionType { get; set; }
-        public string? Question { get; set; }
+        public List<string>? Choices { get; set; }
+        public int? MaxChoiceAllowed { get; set; }
+        public string? Answer { get;}
+    }
+
+    public class UpdateCustomQuestionDTO: CreateCustomQuestionDTO
+    {
     }
 
     public class AnswerQuestionDTO
     {
-        public int Answer { get; set; }
-        public string StringAnswer { get; set; }
+        public string? Answer { get; set; }
+        public List<string>? MultipleChoiceAnswer { get; set; }
     }
 }

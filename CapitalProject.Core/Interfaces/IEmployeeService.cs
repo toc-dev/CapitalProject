@@ -11,6 +11,6 @@ namespace CapitalProject.Core.Interfaces
     {
         Task<List<DisplayCustomQuestionsCandidate>> GetAllQuestions();
         Task<DisplayCustomQuestionsCandidate> GetQuestion(string id);
-        Task<DisplayCustomQuestionDTO> AnswerQuestion(AnswerQuestionDTO model);
+        Task<DisplayCustomQuestionsCandidate> AnswerQuestion(string id, AnswerQuestionDTO model);
     }
 }

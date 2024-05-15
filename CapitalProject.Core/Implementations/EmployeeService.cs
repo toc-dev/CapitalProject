@@ -29,9 +29,45 @@ namespace CapitalProject.Core.Implementations
             _container = _cosmosClient.GetContainer(databaseName, containerName);
             _logger = logger;
         }
-        public Task<DisplayCustomQuestionDTO> AnswerQuestion(AnswerQuestionDTO model)
+        public async Task<DisplayCustomQuestionsCandidate> AnswerQuestion(string id, AnswerQuestionDTO model)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                var question = await _container.ReadItemAsync<CustomQuestion>(id, new PartitionKey(id));
+                var item = question.Resource;
+
+                switch (item.QuestionType)
+                {
+                    case QuestionType.MultipleChoice:
+                        item.Answer = model.Answer;
+                        item.MultipleChoiceAnswer = new MultipleChoiceAnswer()
+                        {
+                            Answers = model?.MultipleChoiceAnswer,
+                        };
+                        _logger?.LogInformation($"Answered custom question: {model?.MultipleChoiceAnswer}");
+                        break;
+                    default:
+                        item.Answer = model.Answer;
+                        _logger?.LogInformation($"Answered custom question: {model?.Answer}");
+                        break;
+                }
+                await _container.ReplaceItemAsync(item, id, new PartitionKey(id));
+                
+
+                return new DisplayCustomQuestionsCandidate()
+                {
+                    QuestionType = question.Resource.QuestionType,
+                    Question = question.Resource.Question,
+                    Answer = model?.Answer,
+                };
+
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError($"{ex.Message}", ex);
+                throw;
+            }
         }
 
         public async Task<List<DisplayCustomQuestionsCandidate>> GetAllQuestions()
@@ -46,7 +82,7 @@ namespace CapitalProject.Core.Implementations
                 results.AddRange(response);
             }
 
-            var allQuestions = results.Select(MapToDto).ToList();
+            var allQuestions = results.Select(MapAnswerToDto).ToList();
             return allQuestions;
         }
 
@@ -54,46 +90,23 @@ namespace CapitalProject.Core.Implementations
         {
             var query = await _container.ReadItemAsync<CustomQuestion>(id, new PartitionKey(id));
 
-            return MapToDto(query);
+            return MapAnswerToDto(query);
         }
-        private static DisplayCustomQuestionsCandidate MapToDto(CustomQuestion entity)
+        private static DisplayCustomQuestionsCandidate MapAnswerToDto(CustomQuestion entity)
         {
             var question = new DisplayCustomQuestionsCandidate();
             switch (entity.QuestionType)
             {
-                case QuestionType.Paragraph:
-                    question.QuestionType = entity.QuestionType;
-                    question.Question = entity.Question;
-                    question.Answer = entity.ParagraphAnswer;
-                    break;
-                case QuestionType.YesorNo:
-                    question.QuestionType = entity.QuestionType;
-                    question.Question = entity.Question;
-                    question.Answer = entity.ParagraphAnswer;
-                    break;
-                case QuestionType.Dropdown:
-                    question.QuestionType = entity.QuestionType;
-                    question.Question = entity.Question;
-                    question.Answer = entity.ParagraphAnswer;
-                    break;
                 case QuestionType.MultipleChoice:
                     question.QuestionType = entity.QuestionType;
                     question.Question = entity.Question;
-                    question.Answer = entity.ParagraphAnswer;
-                    break;
-                case QuestionType.Date:
-                    question.QuestionType = entity.QuestionType;
-                    question.Question = entity.Question;
-                    question.Answer = entity.ParagraphAnswer;
-                    break;
-                case QuestionType.Number:
-                    question.QuestionType = entity.QuestionType;
-                    question.Question = entity.Question;
-                    question.Answer = entity.ParagraphAnswer;
+                    question.MultipleChoiceAnswer = entity?.MultipleChoiceAnswer?.Answers;
                     break;
                 default:
+                    question.QuestionType = entity.QuestionType;
+                    question.Question = entity.Question;
+                    question.Answer = entity.Answer;
                     break;
-
             }
             return question;
         }
