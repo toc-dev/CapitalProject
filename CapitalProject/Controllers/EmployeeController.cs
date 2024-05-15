@@ -2,6 +2,7 @@
 using CapitalProject.Core.Utilities;
 using CapitalProject.Data.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using static CapitalProject.Data.Enums.Enumerations;
 
 namespace CapitalProject.API.Controllers
 {
@@ -16,7 +17,7 @@ namespace CapitalProject.API.Controllers
             _employeeService = employeeService;
         }
 
-        [HttpPost("(createquestion)")]
+        [HttpGet("(getallquestions)")]
         [ProducesResponseType(200, Type = typeof(DisplayCustomQuestionDTO))]
         [ProducesResponseType(400, Type = typeof(List<string>))]
         public async Task<IActionResult> GetAllQuestions()
@@ -31,22 +32,37 @@ namespace CapitalProject.API.Controllers
                 return BadRequest(new CapitalCustomAPIResponseSchema(new List<string>() { ex.Message }));
             }
         }
-        [HttpPost("(deletequestion)")]
+        [HttpGet("(getquestionsbytype)")]
         [ProducesResponseType(200, Type = typeof(DisplayCustomQuestionDTO))]
         [ProducesResponseType(400, Type = typeof(List<string>))]
-        public async Task<IActionResult> DeleteCustomQuestion(string id)
+        public async Task<IActionResult> GetQuestionsByType(QuestionType questionType)
         {
             try
             {
-                await _employeeService.GetQuestion(id);
-                return Ok(new CapitalCustomAPIResponseSchema("Custom Question Deleted"));
+                var response = await _employeeService.GetQuestionByType(questionType);
+                return Ok(new CapitalCustomAPIResponseSchema("Question Retrieval Successful", response));
             }
             catch (Exception ex)
             {
                 return BadRequest(new CapitalCustomAPIResponseSchema(new List<string>() { ex.Message }));
             }
         }
-        [HttpPost("(updatequestion)")]
+        [HttpGet("(getquestion)")]
+        [ProducesResponseType(200, Type = typeof(DisplayCustomQuestionsCandidate))]
+        [ProducesResponseType(400, Type = typeof(List<string>))]
+        public async Task<IActionResult> GetQuestion(string id)
+        {
+            try
+            {
+                var response = await _employeeService.GetQuestion(id);
+                return Ok(new CapitalCustomAPIResponseSchema("Custom Question retrieved", response));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new CapitalCustomAPIResponseSchema(new List<string>() { ex.Message }));
+            }
+        }
+        [HttpPost("(answerquestion)")]
         [ProducesResponseType(200, Type = typeof(DisplayCustomQuestionDTO))]
         [ProducesResponseType(400, Type = typeof(List<string>))]
         public async Task<IActionResult> UpdateCustomQuestion(string id, [FromBody] AnswerQuestionDTO model)
@@ -54,7 +70,23 @@ namespace CapitalProject.API.Controllers
             try
             {
                 var response = await _employeeService.AnswerQuestion(id, model);
-                return Ok(new CapitalCustomAPIResponseSchema("Custom Question Update Successful", response));
+                return Ok(new CapitalCustomAPIResponseSchema("Custom Question Answer Successful", response));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new CapitalCustomAPIResponseSchema(new List<string>() { ex.Message }));
+            }
+        }
+        
+        [HttpPost("(personalinfo)")]
+        [ProducesResponseType(200, Type = typeof(DisplayCustomQuestionDTO))]
+        [ProducesResponseType(400, Type = typeof(List<string>))]
+        public async Task<IActionResult> ProvidePersonalInformation([FromBody] PersonalInformationDTO model)
+        {
+            try
+            {
+                var response = await _employeeService.ProvidePersonalInformation(model);
+                return Ok(new CapitalCustomAPIResponseSchema("Information Recorded", response));
             }
             catch (Exception ex)
             {

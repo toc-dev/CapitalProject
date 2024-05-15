@@ -10,6 +10,7 @@ namespace CapitalProject.API
         {
             services.AddSingleton<IEmployerService>(InitializeCosmosClientInstanceEmployerAsync(configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
             services.AddSingleton<IEmployeeService>(InitializeCosmosClientInstanceEmployeeAsync(configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+            services.AddSingleton<IEmployeeService>(InitializeCosmosClientInstanceEmployeePersonalInfoAsync(configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
             services.AddLogging();
         }
 
@@ -33,6 +34,22 @@ namespace CapitalProject.API
         {
             var databaseName = configuration["DatabaseName"];
             var containerName = configuration["ContainerName"];
+            var account = configuration["ServiceUri"];
+            var key = configuration["Key"];
+            ILogger<EmployerService> logger;
+
+            var client = new CosmosClient(account, key);
+            var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+
+            var employeeService = new EmployeeService(client, databaseName, containerName);
+
+            return employeeService;
+        }
+        public static async Task<EmployeeService> InitializeCosmosClientInstanceEmployeePersonalInfoAsync(IConfiguration configuration)
+        {
+            var databaseName = configuration["DatabaseName"];
+            var containerName = configuration["ContainerName2"];
             var account = configuration["ServiceUri"];
             var key = configuration["Key"];
             ILogger<EmployerService> logger;

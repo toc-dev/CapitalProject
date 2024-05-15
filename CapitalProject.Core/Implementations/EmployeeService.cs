@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static CapitalProject.Data.Enums.Enumerations;
@@ -85,6 +86,21 @@ namespace CapitalProject.Core.Implementations
             var allQuestions = results.Select(MapAnswerToDto).ToList();
             return allQuestions;
         }
+         public async Task<List<DisplayCustomQuestionsCandidate>> GetQuestionByType(QuestionType questionType)
+        {
+            var query = _container.GetItemQueryIterator<CustomQuestion>(new QueryDefinition($"SELECT * FROM c WHERE c.QuestionType = @questionType").WithParameter("@questionType", questionType.ToString()));
+            List<CustomQuestion> results = new List<CustomQuestion>();
+            var result = new DisplayCustomQuestionsCandidate();
+
+            while (query.HasMoreResults)
+            {
+                var response = await query.ReadNextAsync();
+                results.AddRange(response);
+            }
+
+            var allQuestions = results.Select(MapAnswerToDto).ToList();
+            return allQuestions;
+        }
 
         public async Task<DisplayCustomQuestionsCandidate> GetQuestion(string id)
         {
@@ -109,6 +125,44 @@ namespace CapitalProject.Core.Implementations
                     break;
             }
             return question;
+        }
+
+        public async Task<PersonalInformationDisplayDTO> ProvidePersonalInformation(PersonalInformationDTO model)
+        {
+            try
+            {
+                var personalInfo = new PersonalInformation()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    Nationality = model.Nationality,
+                    CurrentResidence = model.CurrentResidence,
+                    IDNumber = model.IDNumber,
+                    DateOfBirth = model.DateOfBirth,
+                    Gender = model.Gender,
+                };
+                await _container.CreateItemAsync(personalInfo, new PartitionKey(personalInfo.Id));
+                return new PersonalInformationDisplayDTO()
+                {
+                    FirstName = personalInfo.FirstName,
+                    LastName = personalInfo.LastName,
+                    Email = personalInfo.Email,
+                    Phone = personalInfo.Phone,
+                    Nationality = personalInfo.Nationality,
+                    CurrentResidence = personalInfo.CurrentResidence,
+                    IDNumber = personalInfo.IDNumber,
+                    DateOfBirth = personalInfo.DateOfBirth,
+                    Gender = personalInfo.Gender,
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex.Message);
+                throw;
+            }
         }
     }
 }

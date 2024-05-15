@@ -10,10 +10,10 @@ namespace CapitalProject.Data.Enums
     {
         public enum QuestionType
         {
-            Paragraph = 1,
+            MultipleChoice=1,
+            Paragraph,
             YesorNo,
             Dropdown,
-            MultipleChoice,
             Date,
             Number,
         }
