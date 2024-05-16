@@ -11,10 +11,12 @@ namespace CapitalProject.API.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
+        private readonly IPersonalInfoService _personalInfoService;
         //private readonly ILogger<EmployerController> _logger;
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(IEmployeeService employeeService, IPersonalInfoService personalInfoService)
         {
             _employeeService = employeeService;
+            _personalInfoService = personalInfoService;
         }
 
         [HttpGet("(getallquestions)")]
@@ -85,7 +87,7 @@ namespace CapitalProject.API.Controllers
         {
             try
             {
-                var response = await _employeeService.ProvidePersonalInformation(model);
+                var response = await _personalInfoService.ProvidePersonalInformation(model);
                 return Ok(new CapitalCustomAPIResponseSchema("Information Recorded", response));
             }
             catch (Exception ex)

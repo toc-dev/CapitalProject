@@ -13,7 +13,6 @@ namespace CapitalProject.Core.Interfaces
         Task<List<DisplayCustomQuestionsCandidate>> GetAllQuestions();
         Task<DisplayCustomQuestionsCandidate> GetQuestion(string id);
         public Task<List<DisplayCustomQuestionsCandidate>> GetQuestionByType(QuestionType questionType);
-        public Task<PersonalInformationDisplayDTO> ProvidePersonalInformation(PersonalInformationDTO model);
         Task<DisplayCustomQuestionsCandidate> AnswerQuestion(string id, AnswerQuestionDTO model);
     }
 }

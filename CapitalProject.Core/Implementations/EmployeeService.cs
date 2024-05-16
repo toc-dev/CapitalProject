@@ -2,10 +2,12 @@
 using CapitalProject.Data.DTOs;
 using CapitalProject.Data.Entities;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,7 +90,7 @@ namespace CapitalProject.Core.Implementations
         }
          public async Task<List<DisplayCustomQuestionsCandidate>> GetQuestionByType(QuestionType questionType)
         {
-            var query = _container.GetItemQueryIterator<CustomQuestion>(new QueryDefinition($"SELECT * FROM c WHERE c.QuestionType = @questionType").WithParameter("@questionType", questionType.ToString()));
+            var query = _container.GetItemLinqQueryable<CustomQuestion>().Where(x=>x.QuestionType==questionType).ToFeedIterator();
             List<CustomQuestion> results = new List<CustomQuestion>();
             var result = new DisplayCustomQuestionsCandidate();
 
@@ -127,42 +129,5 @@ namespace CapitalProject.Core.Implementations
             return question;
         }
 
-        public async Task<PersonalInformationDisplayDTO> ProvidePersonalInformation(PersonalInformationDTO model)
-        {
-            try
-            {
-                var personalInfo = new PersonalInformation()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Nationality = model.Nationality,
-                    CurrentResidence = model.CurrentResidence,
-                    IDNumber = model.IDNumber,
-                    DateOfBirth = model.DateOfBirth,
-                    Gender = model.Gender,
-                };
-                await _container.CreateItemAsync(personalInfo, new PartitionKey(personalInfo.Id));
-                return new PersonalInformationDisplayDTO()
-                {
-                    FirstName = personalInfo.FirstName,
-                    LastName = personalInfo.LastName,
-                    Email = personalInfo.Email,
-                    Phone = personalInfo.Phone,
-                    Nationality = personalInfo.Nationality,
-                    CurrentResidence = personalInfo.CurrentResidence,
-                    IDNumber = personalInfo.IDNumber,
-                    DateOfBirth = personalInfo.DateOfBirth,
-                    Gender = personalInfo.Gender,
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger?.LogError(ex.Message);
-                throw;
-            }
-        }
     }
 }
