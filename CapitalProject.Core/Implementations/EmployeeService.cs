@@ -19,14 +19,14 @@ namespace CapitalProject.Core.Implementations
     {
         private readonly CosmosClient _cosmosClient;
         private readonly Container _container;
-        private readonly ILogger<EmployerService>? _logger;
+        private readonly ILogger<EmployeeService>? _logger;
 
         public EmployeeService(CosmosClient cosmosClient, string databaseName, string containerName)
         {
             _cosmosClient = cosmosClient;
             _container = _cosmosClient.GetContainer(databaseName, containerName);
         }
-        public EmployeeService(CosmosClient cosmosClient, string databaseName, string containerName, ILogger<EmployerService> logger)
+        public EmployeeService(CosmosClient cosmosClient, string databaseName, string containerName, ILogger<EmployeeService> logger)
         {
             _cosmosClient = cosmosClient;
             _container = _cosmosClient.GetContainer(databaseName, containerName);
