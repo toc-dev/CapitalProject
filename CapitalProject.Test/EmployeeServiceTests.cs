@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static CapitalProject.Data.Enums.Enumerations;
 
-namespace CapitalProject.Tests
+namespace CapitalProject.Test
 {
     public class EmployeeServiceTests
     {
