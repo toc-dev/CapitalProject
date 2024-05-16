@@ -1,40 +1,52 @@
 # CapitalProject
-This is a .NET 8 application that leverages Azure Cosmos Db to store and retrieve custom questions created by users
-Below, you will find the necessary configurations and dependencies.
 
-#Technologies
-.NET 8: Newer versions of .NET come with such features as implicit usings and a deprecated startup class. As well as very robust reflection properties.
-Clean Architecture: The project remains faithful to the core ideas of clean architecture principles, while also bearing in mind the size of the project
-Azure Cosmos DB: Provides us with a noSQL db.
-xUnit: leveraged for unit tests (and integration tests if the need ever arises).
-Prerequisites
-.NET 8 SDK
-Azure Cosmos DB Account or Azure Cosmos DB Emulator
+This is a .NET 8 application that leverages Azure Cosmos DB to store and retrieve custom questions created by users. Below, you will find the necessary configurations and dependencies.
 
-#Installation and Setup
-Clone the repository to your local machine:
+## Technologies
 
-git clone <repository-url>
-Open the solution in your preferred IDE (Visual Studio, Visual Studio Code, etc.).
+- **.NET 8**: Leverages newer features such as implicit usings, a deprecated startup class, and robust reflection properties.
+- **Clean Architecture**: Maintains core ideas of clean architecture principles while considering project size.
+- **Azure Cosmos DB**: Provides a NoSQL database.
+- **xUnit**: Used for unit tests (and integration tests if needed).
 
-#Configure Azure Cosmos DB:
+## Prerequisites
 
-If you are using the Azure Cosmos DB Emulator locally, make sure it's installed and running on your machine. You can find the emulator installation instructions here.
-Obtain the following details from your Azure Cosmos DB account or emulator: EndpointUri, DatabaseName, and PrimaryKey.
-Add these details to the appsettings.json file under the "CosmosDbSettings" section:
- "CosmosDb": {
-   "ServiceUri": "https://localhost:8081",
-   "Key": "your primary key",
-   "DatabaseName": "your database name",
-   "ContainerName": "your container name",
-   "ContainerName2": "other containers"
- }
+- .NET 8 SDK
+- Azure Cosmos DB Account or Azure Cosmos DB Emulator
 
-#Running Tests
+## Installation and Setup
+
+1. **Clone the repository to your local machine:**
+
+    ```bash
+    git clone <repository-url>
+    ```
+
+2. **Open the solution in your IDE.**
+
+3. **Configure Azure Cosmos DB:**
+
+    - If you are using the Azure Cosmos DB Emulator locally, ensure it's installed and running on your machine. You can find the emulator installation instructions [here](https://docs.microsoft.com/en-us/azure/cosmos-db/local-emulator).
+    - Obtain the following details from your Azure Cosmos DB account or emulator: `EndpointUri`, `DatabaseName`, and `PrimaryKey`.
+    - Add these details to the `appsettings.json` file under the `CosmosDb` section:
+
+    ```json
+    {
+      "CosmosDb": {
+        "ServiceUri": "https://localhost:8081",
+        "Key": "your-primary-key",
+        "DatabaseName": "your-database-name",
+        "EmployerContainerName": "your-employer-container-name",
+        "EmployeeContainerName": "your-employee-container-name",
+        "EmployeePersonalInfoContainerName": "your-employee-personal-info-container-name"
+      }
+    }
+    ```
+
+## Running Tests
+
 Unit tests for this project are written using xUnit. To run the tests, use the following command in the terminal:
 
+```bash
 dotnet test
-This will execute all the unit tests in the project and provide the test results.
 
-License
-This project is licensed under the MIT License. Feel free to use, modify, and distribute the code as per the license terms.
