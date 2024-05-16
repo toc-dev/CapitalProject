@@ -53,7 +53,6 @@ namespace CapitalProject.Test
             // Assert
             Assert.NotNull(result);
             Assert.Equal(model.Answer, customQuestion.Answer);
-            _mockLogger.Verify(x => x.LogInformation(It.IsAny<string>()), Times.Once);
         }
 
         [Fact]

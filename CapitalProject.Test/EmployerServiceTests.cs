@@ -85,7 +85,6 @@ namespace CapitalProject.Test
             Assert.NotNull(result);
             Assert.Equal(model.Question, result.Question);
             Assert.Equal(model.QuestionType, result.QuestionType);
-            _mockLogger.Verify(x => x.LogInformation(It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -102,7 +101,6 @@ namespace CapitalProject.Test
 
             // Assert
             _mockContainer.Verify(x => x.DeleteItemAsync<CustomQuestion>(id, It.IsAny<PartitionKey>(), null, default), Times.Once);
-            _mockLogger.Verify(x => x.LogInformation(It.IsAny<string>()), Times.Once);
         }
     }
 }

@@ -15,14 +15,14 @@ namespace CapitalProject.Core.Implementations
     {
         private readonly CosmosClient _cosmosClient;
         private readonly Container _container;
-        private readonly ILogger<EmployerService>? _logger;
+        private readonly ILogger<PersonalInfoService>? _logger;
 
         public PersonalInfoService(CosmosClient cosmosClient, string databaseName, string containerName)
         {
             _cosmosClient = cosmosClient;
             _container = _cosmosClient.GetContainer(databaseName, containerName);
         }
-        public PersonalInfoService(CosmosClient cosmosClient, string databaseName, string containerName, ILogger<EmployerService> logger)
+        public PersonalInfoService(CosmosClient cosmosClient, string databaseName, string containerName, ILogger<PersonalInfoService> logger)
         {
             _cosmosClient = cosmosClient;
             _container = _cosmosClient.GetContainer(databaseName, containerName);
